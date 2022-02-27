@@ -31,7 +31,7 @@ db.connect(err =>{
     console.log('MySQL connected')
 })
 
-const init = () => {
+const init = async() => {
     return inquirer.prompt([
         {   type: 'list',
             name: 'Options',
@@ -45,7 +45,7 @@ const init = () => {
             "Add an employee",
             "Update an employee role"],
         },
-    ]).then(function (answers) { if (answers.Options === "View all departments") {
+    ]).then (await function (answers) { if (answers.Options === "View all departments") {
             db.query('SELECT * FROM dept', function (err, results) {
             console.log(results);
               });
@@ -54,19 +54,20 @@ const init = () => {
             console.log(results);
               });
             console.log("OK")
-        } else if (answers.Options === "View all employees") {
+        } else if (answers.Options === "View all employees") { await
             db.query('SELECT * FROM employee', function (err, results) {
                 console.log(results);
               });
-        } else if (answers.Options === "Add a department") {
+        } else if (answers.Options === "Add a department") { await
             console.log("OK")
-        } else if (answers.Options === "Add a role") {
+        } else if (answers.Options === "Add a role") { await
             console.log("OK")
-        } else if (answers.Options === "Add an employee") {
+        } else if (answers.Options === "Add an employee") { await
             console.log("OK")
-        } else (answers.Options === "Update an employee role")
+        } else if (answers.Options === "Update an employee role") { await 
             console.log("OK") 
-        });
+        
+    }});
 }
 
 
