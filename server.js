@@ -64,7 +64,7 @@ const init = async() => {
             console.log("OK")
         } else if (answers.Options === "Add a role") { add_role()
             console.log("OK")
-        } else if (answers.Options === "Add an employee") {
+        } else if (answers.Options === "Add an employee") { add_employee()
             console.log("OK")
         } else if (answers.Options === "Update an employee role") {
             console.log("OK") 
@@ -111,6 +111,40 @@ const add_role = async() => {
         // console.log(role);
         // console.log(dept.new_role)
         let sql = `INSERT INTO roles(title, salary, department_id) VALUES("${role.new_role}", "${role.salary}", "${role.department_id}")`;
+        db.query(sql);
+    })
+};
+
+const add_employee = async() => {
+    return inquirer.prompt([
+        {
+            type: "input",
+            message: "Input first name:",
+            name: "first_name"
+        },
+        {
+            type: "input",
+            message: "Input last name",
+            name: "last_name"
+        },
+        {
+            type: "input",
+            message: "Input Department ID (Integer only):",
+            name: "department_id"
+        },
+        {
+            type: "list",
+            message: "Select Manager ID:",
+            name: "manager_id",
+            choices: ['1','2','3','4',] 
+        },
+    ]).then (function (role) { 
+        // console.log(role);
+        // console.log(dept.new_role)
+        console.log(role.manager_id)
+        let sql = 
+        `INSERT INTO employee(first_name, last_name, role_id, manager_id) \
+         VALUES("${role.first_name}", "${role.last_name}", "${role.department_id}", "${role.manager_id}")`;
         db.query(sql);
     })
 };
