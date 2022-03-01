@@ -1,3 +1,4 @@
+//Setup
 const express = require('express');
 const mysql = require('mysql2');
 const cTable = ('console.table')
@@ -10,10 +11,6 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-// // Express middleware
-// app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
-
 // Connect to database
 const db = mysql.createConnection(
   {
@@ -25,14 +22,16 @@ const db = mysql.createConnection(
   console.log(`Connected to the employees_db database.`),
 );
 
-db.connect(err =>{
-    if(err) {
-        throw err
-    }
-    console.log('MySQL connected')
-})
+//Error Backup Code
+// db.connect(err =>{
+//     if(err) {
+//         throw err
+//     }
+//     // console.log('MySQL connected')
+// })
 
-const init = async() => {
+//Main Function
+const init = () => {
     return inquirer.prompt([
         {   type: 'list',
             name: 'Options',
@@ -44,34 +43,36 @@ const init = async() => {
             "Add a department", 
             "Add a role",  
             "Add an employee",
-            "Update an employee role"],
+            "Update an employee role",
+            "Exit"],
         },
-    ]).then (function (answers) { if (answers.Options === "View all departments") {
-            db.query ('SELECT * FROM dept', function (err, results) {
-            console.table(results);
-            init()
-              });   
-        } else if (answers.Options === "View all roles") {
-            db.query('SELECT * FROM roles', function (err, results) {
-            console.table(results);
-              });
-            console.log("OK")
+    ]).then (function (answers) 
+        { if (answers.Options === "View all departments") 
+            { db.query ('SELECT * FROM dept', function (err, results)
+                { console.table(results); init()
+            });
+        } else if (answers.Options === "View all roles") 
+            { db.query('SELECT * FROM roles', function (err, results) 
+                { console.table(results); init()
+            });
         } else if (answers.Options === "View all employees") {
-            db.query('SELECT * FROM employee', function (err, results) {
-            console.table(results);
-              });
-        } else if (answers.Options === "Add a department") { add_dept()
-            console.log("OK")
-        } else if (answers.Options === "Add a role") { add_role()
-            console.log("OK")
-        } else if (answers.Options === "Add an employee") { add_employee()
-            console.log("OK")
-        } else if (answers.Options === "Update an employee role") {
-            console.log("OK") 
-        
-    }});
+        db.query('SELECT * FROM employee', function (err, results) {
+        console.table(results);  init()
+            });
+        } else if (answers.Options === "Add a department") 
+            { add_dept();
+        } else if (answers.Options === "Add a role") 
+            { add_role(); 
+        } else if (answers.Options === "Add an employee") 
+            { add_employee();
+        } else if (answers.Options === "Update an employee role") 
+            { update_employee(); 
+        } else if (answers.Options === "Exit") 
+            { process.exit(1)    
+        }
+    })
 }
-
+ 
 
 const add_dept = async() => {
     return inquirer.prompt([
@@ -86,6 +87,7 @@ const add_dept = async() => {
         let sql = `INSERT INTO dept(dept_name) VALUES("${dept.new_dept}")`;
         console.log(sql)
         db.query(sql);
+        init()
 
     })
 };
@@ -112,6 +114,7 @@ const add_role = async() => {
         // console.log(dept.new_role)
         let sql = `INSERT INTO roles(title, salary, department_id) VALUES("${role.new_role}", "${role.salary}", "${role.department_id}")`;
         db.query(sql);
+        init()
     })
 };
 
@@ -139,16 +142,32 @@ const add_employee = async() => {
             choices: ['1','2','3','4',] 
         },
     ]).then (function (role) { 
-        // console.log(role);
-        // console.log(dept.new_role)
         console.log(role.manager_id)
         let sql = 
         `INSERT INTO employee(first_name, last_name, role_id, manager_id) \
          VALUES("${role.first_name}", "${role.last_name}", "${role.department_id}", "${role.manager_id}")`;
         db.query(sql);
+        init()
+    })
+};
+
+const update_employee = async() => {
+    return inquirer.prompt([
+        {
+            type: "input",
+            message: "Select Employee (INT):",
+            name: "upd_emp"
+        },
+        {
+            type: "input",
+            message: "Input New Role (INT):",
+            name: "new_role_id"
+        },
+    ]).then (function (update) { 
+        let sql = `UPDATE employee SET role_id = "${update.new_role_id}" WHERE id = "${update.upd_emp}"`
+        db.query(sql);
+        init()
     })
 };
 
 init();
-
-// 'INSERT INTO dept(dept_name) VALUES(' + '"' + `${dept.new_dep}` + '"' + ")"
