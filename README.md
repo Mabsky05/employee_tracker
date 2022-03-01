@@ -3,7 +3,7 @@
 ![alt text](assets/sample.jpg)
 
 ## Video Walkthrough
-https://youtu.be/wH3vdVmGd40
+https://www.youtube.com/watch?v=RI1UBNfYUXg
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -40,27 +40,31 @@ MySQL Installed
 ### NPM Installations
 NPM install: express, mysql2, console.table, fs, inquirer
 
-### Execution 
-From root, run index.js.
+### Execution: Run SQL
+From root/db: run schema.sql, then run seeds.sql to populate.
+Optional: Edit seeds file to add roles/employees/departments. 
 
-Open Node.js via integrated terminal. Run node index. 
+### Execution: Run Node
+Run 'node server' via integrated terminal, then select option to execute.
 
-Follow prompts to generate profiles. 
+Each 'View' option displays relevant data in tables.
 
-An html output will be generated in the root folder. 
-
+Each 'Add' or 'Update' Option: 'INT' requires an integer input. Check tables to find 
+corresponding integer for required data. 
 
 ## Contact
 grimdango@gmail.com
 
 
 ## Log 
-### 15/02/22
+### 03/01/22
+Polishing, adding README. Organising files. 
 
 ### 12/02/22
+Code complete
 
-
-### 11/02/22
+### 27/02/22
+Initiated project
 
    
 
